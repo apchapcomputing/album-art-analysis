@@ -1,5 +1,11 @@
 import gradio as gr
 
+try:
+    import spaces
+    HF_SPACES = True
+except ImportError:
+    HF_SPACES = False
+
 from fastai.vision.all import *
 from pathlib import Path
 
@@ -20,6 +26,9 @@ def load_models():
             models[name] = load_learner(pkl)
     return models
 
+gpu_decorator = spaces.GPU if HF_SPACES else lambda fn: fn
+
+@gpu_decorator
 def predict(img, model):
     if not models:
         raise gr.Error('No models found.')
@@ -29,7 +38,6 @@ def predict(img, model):
     learn = models[model]
     pred, _, probs = learn.predict(img)
     return dict(zip(learn.dls.vocab, map(float, probs)))
-
 
 models = load_models()
 
