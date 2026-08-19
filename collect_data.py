@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import requests
 import os
 import re
+import csv
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -18,6 +19,26 @@ def fetch_albums_by_year(year, limit=20):
     results = sp.search(q=f'year:{year}', type='album', limit=limit)
     albums = results['albums']['items']
     return albums
+
+def load_formats(csv_path='formats.csv'):
+    formats = []
+    with open(csv_path, newline='') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            formats.append((row['format'], int(row['start_yeart']), int(row['end_year'])))
+    return formats
+
+def get_format_for_year(year, formats):
+    # Pick the earliest-starting format whose range covers the year,
+    # so that vinyl takes priority over tape, cd over digital_download, etc.
+    match = None
+    for fmt, start, end in formats:
+        if start <= year <= end:
+            if match is None or start < match[1]:
+                match = (fmt, start)
+    return match[0] if match else 'pre_vinyl'
+
+FORMATS = load_formats()
 
 def sanitize_album_name(album_name):
     # replace invalid characters with underscore
