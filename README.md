@@ -1,18 +1,14 @@
 ---
-title: {{title}}
-emoji: {{emoji}}
-colorFrom: {{colorFrom}}
-colorTo: {{colorTo}}
-sdk: {{sdk}}
-sdk_version: "{{sdkVersion}}"
-{{#pythonVersion}}
-python_version: "{{pythonVersion}}"
-{{/pythonVersion}}
+title: Album Art Analysis
+emoji: 🎙️
+colorFrom: purple
+colorTo: blue
+sdk: gradio
+sdk_version: "6.24.0"
+python_version: "3.13"
 app_file: app.py
 pinned: false
 ---
-
-# Album Art Analysis
 
 ## Thesis
 
