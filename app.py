@@ -23,7 +23,7 @@ def load_models():
 
 load_models()
 
-@spaces.GPU
+@spaces.GPU(duration=120)
 def predict(img, model):
     if not models:
         raise gr.Error('No models found.')
